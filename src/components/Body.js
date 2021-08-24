@@ -1,36 +1,51 @@
 import React from 'react';
-import { useTable,useSortBy } from 'react-table'
+import { useTable,useSortBy,useBlockLayout, useResizeColumns } from 'react-table'
 import '../styles/App.css';
 import '../styles/Body.css';
 import sortIcon from '../images/sort.png';
 
 function Body(props) {
 
+  const defaultColumn = React.useMemo(
+    () => ({
+      minWidth: 30,
+      width: 150,
+      maxWidth: 400,
+    }),
+    []
+  )
+
     const columns = React.useMemo(
         () => [
           {
             Header: 'Emp Id',
             accessor: 'id', // accessor is the "key" in the data
+            width: 119,
           },
           {
             Header: 'Name',
             accessor: 'name',
+            width: 160,
           },
           {
             Header: 'Email',
             accessor: 'email',
+            width: 270,
           },
           {
             Header: 'DOB',
             accessor: 'dob',
+            width: 105,
           },
           {
             Header: 'Status',
             accessor: 'userStatus',
+            width: 119,
           },
           {
             Header: 'Credits',
             accessor: 'creditBalance',
+            width: 121,
           },
         ],
         []
@@ -43,12 +58,12 @@ function Body(props) {
  
    return (
        <div className="body-container">
-            <Table columns={columns} data={data} />
+            <Table columns={columns} data={data} defaultColumn={defaultColumn}/>
         </div>
    );
 }
 
-function Table({ columns, data }) {
+function Table({ columns, data, defaultColumn }) {
     // Use the state and functions returned from useTable to build your UI
     const {
       getTableProps,
@@ -56,11 +71,16 @@ function Table({ columns, data }) {
       headerGroups,
       rows,
       prepareRow,
+      state,
+      resetResizing,
     } = useTable({
       columns,
       data,
+      defaultColumn,
     },
-    useSortBy
+    useSortBy,
+    useBlockLayout,
+    useResizeColumns
     )
   
     // Render the UI for your table
@@ -79,6 +99,14 @@ function Table({ columns, data }) {
                                 : ' 🔼'
                             : " 🔽🔼"}
                         </span>
+                        
+                        {/* Use column.getResizerProps to hook up the events correctly */}
+                        <div
+                          {...column.getResizerProps()}
+                          className={`resizer ${
+                            column.isResizing ? 'isResizing' : ''
+                          }`}
+                        />
                     </th>
               ))}
             </tr>

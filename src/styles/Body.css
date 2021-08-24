@@ -21,6 +21,9 @@ table thead tr {
 table th,
 table td {
     padding: 12px 15px;
+
+    
+    position: relative;
 }
 
 table tbody tr {
@@ -36,9 +39,26 @@ table tbody tr:last-of-type {
 }
 
 .sortingIcons{
-    float: right;
+    float: right    ;
 }
 
+.resizer {
+    display: inline-block;
+    background: #ffe152;
+    width: 10px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translateX(50%);
+    z-index: 1;
+    /* ${'' prevents from scrolling while dragging on touch devices} */
+    touch-action:none;
+}
+
+.isResizing {
+    background: rgb(41, 243, 75);
+}
 
 @media only screen and (max-width: 1000px) {
     .body-container{

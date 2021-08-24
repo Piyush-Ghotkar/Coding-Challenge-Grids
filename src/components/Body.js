@@ -55,6 +55,8 @@ function Body(props) {
     () => props.jsonData,
     [props.jsonData]
     )
+
+    
  
    return (
        <div className="body-container">
@@ -62,6 +64,19 @@ function Body(props) {
         </div>
    );
 }
+
+const IndeterminateCheckbox = React.forwardRef(
+  ({ indeterminate, ...rest }, ref) => {
+    const defaultRef = React.useRef()
+    const resolvedRef = ref || defaultRef
+
+    React.useEffect(() => {
+      resolvedRef.current.indeterminate = indeterminate
+    }, [resolvedRef, indeterminate])
+
+    return <input type="checkbox" ref={resolvedRef} {...rest} />
+  }
+)
 
 function Table({ columns, data, defaultColumn }) {
     // Use the state and functions returned from useTable to build your UI
@@ -71,7 +86,9 @@ function Table({ columns, data, defaultColumn }) {
       headerGroups,
       rows,
       prepareRow,
+      allColumns,
       state,
+      getToggleHideAllColumnsProps,
       resetResizing,
     } = useTable({
       columns,
@@ -85,6 +102,21 @@ function Table({ columns, data, defaultColumn }) {
   
     // Render the UI for your table
     return (
+      <>
+
+      <div className="filter-checkbox">
+        {allColumns.map(column => (
+          <div key={column.id} className="checkbox-item">
+            <label>
+              <input type="checkbox" {...column.getToggleHiddenProps()} />{' '}
+              {column.Header}
+            </label>
+          </div>
+        ))}
+        <br />
+      </div>
+
+
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
@@ -125,6 +157,8 @@ function Table({ columns, data, defaultColumn }) {
           })}
         </tbody>
       </table>
+
+      </>
     )
   }
 

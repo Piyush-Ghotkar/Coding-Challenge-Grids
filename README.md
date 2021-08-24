@@ -4,7 +4,7 @@
     1. Searching 
     2. Sorting
     3. Resizing Columns
-    4. Hide Columns
+    4. Column Hiding 
 
 #### Steps to Run Project locally:
     1. Clone repository
